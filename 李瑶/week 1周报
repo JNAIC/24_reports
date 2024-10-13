@@ -1,0 +1,16 @@
+name:李瑶
+1、简单地复习了以前学过的python知识，学习到了元组
+2、通过老师了解了梯度下降法找出最优曲线
+3、了解了numpy和matploitlib模块，可以绘制简单的图像
+import numpy as np
+import matplotlib.pyplot as plt
+x=np.arange(0,6,0.1)
+y1=np.sin(x)
+y2=np.cos(x)
+plt.plot(x,y1,label="sin")
+plt.plot(x,y2,linestyle='--',label="cos")
+plt.xlabel("x")
+plt.ylabel("y")
+plt.title("sin&cos")
+plt.legend()
+plt.show()
