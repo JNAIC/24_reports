@@ -1,0 +1,66 @@
+##！冲鸭！努力努力！我可是智能系统的ai人
+#哈哈，我已经练就了无字幕看教程学python的绝技（其实是老是忘带耳机，大家不要跟我学）
+#可喜可贺，我把文件看完了，呜呜，虽然不是很多（主要因为这周要干的事着实有点多）
+1、
+#完成一个字典的定义和遍历,找出成绩最好的人
+score ={
+'zhangsan':{'语文':108,'数学':125,'英语':134},
+'lisi':{'语文':118,'数学':131,'英语':130},
+'wangmazi':{'语文':110,'数学':137,'英语':128}
+}
+max=score['zhangsan']['语文']+score['zhangsan']['数学']+score['zhangsan']['英语']
+for name in score:
+    num=score[name]['语文']+score[name]['数学']+score[name]['英语']
+    if num> max:
+        max=num
+        bestman=name
+print(bestman)
+2、
+f1 = open("C:\\Users\\liyao\\OneDrive\\文档\\python.txt","r",encoding="UTF-8")
+content = f1.read()
+print(content)
+f2 = open("C:\\Users\\liyao\\OneDrive\\文档\\python2.txt","w",encoding="UTF-8")
+f2.write(content)
+f1.close()
+f2.close()
+#算是一点比较基础的代码
+#我还入门了感知机，非常基础，但是我可以创造一个异或门了，a门，保佑我成为ai大佬
+#实现一个简单的与门感知机（这里的输入信号定两个：x1、x2)
+import numpy as np
+def AND(x1,x2):
+    w = np.array([0.5,0.5])#定义适合的参数-权重
+    x = np.array([x1,x2])
+    b=-0.7 #0.7为阀值，b为偏置
+    sum = np.sum(w*x)+b
+    if sum <= 0:
+        return 0
+    else:
+        return 1
+#同样的方法定义与非门
+def NAND(x1,x2):
+    w = np.array([-0.5,-0.5])
+    x = np.array([x1,x2])
+    b=0.7 
+    sum = np.sum(w*x)+b
+    if sum <= 0:
+        return 0
+    else:
+        return 1
+#同样的方法定义或门
+def OR(x1,x2):
+    w = np.array([0.2,0.2])
+    x = np.array([x1,x2])
+    b=-0.1
+    sum = np.sum(w*x)+b
+    if sum <= 0:
+        return 0
+    else:
+        return 1
+#通过双层感知机实现异或门
+def XOR(x1,x2):
+    s1 = NAND(x1,x2)
+    s2 = OR(x1,x2)
+    res = AND(s1,s2)
+    return res
+print(XOR(0,0))
+#我会继续努力的！！！都比较基础，总结一下我还是要加强我的时间管理能力，多多理解，早日朝更高阶迈进。
