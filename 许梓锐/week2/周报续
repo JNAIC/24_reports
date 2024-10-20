@@ -1,0 +1,242 @@
+'''name_list=[123,'it']
+print(name_list)
+print(type(name_list))
+my_list=[[1,2,3],4]
+print(my_list)
+print(type(my_list))'''
+'''name_list=[1,2,34,3]
+print(name_list[0])'''
+'''name_list=[1,2,34,3]
+print(name_list[-1])'''
+'''my_list=[[1,2,3],[4,5,6]]
+print(my_list[0][1])'''
+'''mylist=["ither","jided","fsfeu"]
+index=mylist.index("ither")
+print(f"si{index}")'''
+'''mylist=["ither","jided","fsfeu"]
+index=mylist.index("hello")
+print(f"si{index}")'''
+#改变数据
+'''mylist=["ither","jided","fsfeu"]
+mylist[0]='cat'
+print(f"si{mylist}")'''
+#插p入数据
+'''mylist=["ither","jided","fsfeu"]
+index=mylist.index("ither")
+mylist.insert(index,1)
+print(mylist)'''
+#追加元素1
+'''mylist=["ither","jided","fsfeu"]
+mylist.append(4)
+print(mylist)'''
+#追加元素2
+'''mylist=["ither","jided","fsfeu"]
+mylist.append([2,3,4])
+print(mylist)'''
+#追加元素3
+'''mylist=["ither","jided","fsfeu"]
+mylist.extend([2,3,4])
+print(mylist)'''
+#删除数据
+'''mylist=["ither","jided","fsfeu"]
+mylist.pop(2)
+print(mylist)'''
+#删除数据2
+'''mylist=["ither","jided","fsfeu"]
+del mylist[2]
+print(mylist)'''
+#通过remove方法移除重复数据的第一个值
+'''mylist=["ither","ither","jided","fsfeu"]
+mylist.remove("ither")
+print(mylist)'''
+#清空列表
+'''mylist=["ither","ither","jided","fsfeu"]
+mylist.clear()
+print(mylist)'''
+#统计某元素在列表中的数量
+'''mylist=["ither","ither","jided","fsfeu"]
+print(mylist.count("ither"))'''
+#列表共有多少个元素
+'''mylist=["ither","ither","jided","fsfeu"]
+print(len(mylist))'''
+#practice
+'''mylist=[21,25,21,23,22,20]
+mylist.extend([31])
+mylist.extend([29,33,30])
+print(mylist[0])
+print(mylist[len(mylist)-1])#len(-1)也可以
+index=mylist.index(31)
+print(index)'''
+#while 循环
+'''mylist=[21,25,21,23,22,20]
+index=0
+while index<len(mylist):
+    elsement=mylist[index]
+    print(elsement)
+    index+=1'''
+#for循环
+'''mylist=[21,25,21,23,22,20]
+for x in mylist:
+    print(x)'''
+#定义元组
+'''hello=(1,"2","3")
+print(hello)
+t2=()
+t3=tuple()
+print(type(t2))'''
+#定义单个元素的元组
+'''t2=("hello",)#','很重要'''
+#嵌套元组
+'''t5=((1,2,3),(3,3,4))
+print(t5)'''
+#取出嵌套元组的数据
+'''t5=((1,2,3),(3,3,4))
+print(t5[1][2])'''
+#元组查下标
+'''t5=('i','h')
+index=t5.index('i')
+print(index)'''
+#count查元素,看长度
+'''t5=('i','h','i')
+count=t5.count('i')
+num=len(t5)
+print(count)
+print(num)'''
+#元组的遍历while
+'''t5=('i','h','m',1,2,3,3)
+index=0
+while index<len(t5):
+    print(t5[index])
+    index+=1'''
+#元组的遍历for
+'''t5=('i','h','m',1,2,3,3)
+for x in t5:
+    print(x)
+'''
+#字符串
+'''my_str='ithskrb sduibdf'
+print(my_str[0])
+print(my_str[-15])'''
+#查找字符的下标
+'''my_str='ithskrb sduibdf'
+print(my_str.index('sdu'))'''
+#字符串的替换，再生成一个新的字符
+'''my_str='ithskrb sduibdf'
+num=my_str.replace('i','o')
+print(num)'''
+#将字符串进行切割，得到列表
+'''my_str='ithskrb sduibdf'
+my_str_list=my_str.split(' ')
+print(my_str_list)'''
+#strip方法
+'''my_str='  ithskrb sduibdf  '
+new=my_str.strip()
+print(new)'''
+'''my_str='12ithskrb sduibdf12'
+new=my_str.strip('12')
+print(new)'''
+#count,len
+'''my_str='  ithskrb sduibdf  '
+new=my_str.strip()
+num=new.count('i')
+iii=len(new)
+print(iii)
+'''
+#practice
+'''my_str='itheima itcast boxuegu'
+num=my_str.count('it')
+my_str_relace=my_str.replace(' ','|')
+my_str_list=my_str_relace.split('|')
+print(my_str_list)'''
+#字符串的切片
+'''my_str='12345678'
+result=my_str[1:8:3]
+print(result)'''
+#practice
+'''my_str='挖过心愿,爱德华威数位我,支持我的'
+result1=my_str[::-1][8:12]
+print(result1)
+result2=my_str[5:9:1][::-1]
+print(result2)
+result3=my_str.split(",")[1].replace('数位我',"")[::-1]
+print(result3)'''
+#集合
+'''my_set={'1','2','he','ma','he'}
+my_set_empty=set()
+print(my_set)
+print(my_set_empty)'''
+'''my_set={1,2,3,4}
+my_set.add(0)
+print(my_set)
+my_set={1,2,3,4}
+my_set.pop()'''#随机取出某个数之后剩下的pop
+'''print(my_set)
+my_set={1,2,3,4}
+my_set.remove(4)#移除
+print(my_set)
+my_set={1,2,3,4}
+my_set.clear()
+print(my_set)'''
+#差集一有二没有
+'''my_set1={1,2,3,4}
+my_set2={4,5,6}
+my_set1.add(0)
+set3=my_set1.difference(my_set2)
+print(set3)'''
+#消除差集一被修改二不变
+'''my_set1={1,2,3,4}
+my_set2={4,5,6}
+my_set1.add(0)
+my_set1.difference_update(my_set2)
+print(my_set1)
+print(my_set2)'''
+#合并union
+'''my_set1={1,2,3,4}
+my_set2={4,5,6}
+my_set1.add(0)
+set3=my_set1.union(my_set2)
+print(set3)'''
+#集合的遍历不支持while支持for
+'''my_set={1,2,3,4}
+for x in my_set:
+    print(x)'''
+#字典
+'''my_dict={"王":1,"啊":2,"ka":3}
+my_dict2={}
+my_dict3=dict()
+print(my_dict)
+print(my_dict2)
+print(my_dict3)'''
+
+'''my_dict={"王":1,"啊":2,"ka":3}
+my_dict2={}
+my_dict3=dict()
+print(my_dict["王"])
+'''
+#查找
+'''my_dict={"王":{"yu":1,"ying":2},
+"啊":{"yu":4,"ying":5},
+"ka":{"yu":6,"ying":9}}
+print(my_dict["王"]["ying"])'''
+#增加
+'''my_dict={"王":1,"啊":2,"ka":3}
+my_dict["lll"]=99
+print(my_dict)'''
+#更新
+'''my_dict={"王":1,"啊":2,"ka":3}
+my_dict["王"]=99
+print(my_dict)'''
+#移除
+'''my_dict={"王":1,"啊":2,"ka":3}
+new=my_dict.pop("王")
+print(my_dict)'''
+    #1#被移除的数字
+'''print(new)'''
+#清空clear
+'''my_dict={"王":1,"啊":2,"ka":3}
+my_dict.clear()
+print(my_dict)'''
+#获得所有的key
+'''my_dict={"王":1,"啊":2,"ka":3}
+new=my_dict.keys()
+print(new)'''
