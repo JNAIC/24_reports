@@ -1,0 +1,28 @@
+#1主要学习了列表的相关知识。
+  创建列表
+  numbers = [1, 2, 3, 4, 5]
+  访问元素
+  print(numbers[0])  # 输出: 1
+  切片
+  print(numbers[1:4])  # 输出: [2, 3, 4]
+  添加元素
+  numbers.append(6)
+  numbers.insert(2, 10)
+  print(numbers)  # 输出: [1, 2, 10, 3, 4, 5, 6]
+  删除元素
+  numbers.remove(10)
+  removed_element = numbers.pop(2)
+  print(numbers)  # 输出: [1, 2, 3, 4, 5, 6]
+  print(removed_element)  # 输出: 3
+  长度
+  print(len(numbers))  # 输出: 6
+  遍历列表
+  for num in numbers:
+    print(num)
+  排序
+  numbers.sort()
+  print(numbers)  # 输出: [1, 2, 4, 5, 6]
+  反转
+  numbers.reverse()
+  print(numbers)  # 输出: [6, 5, 4, 2, 1]
+#2学习了解了基本的线性回归的知识，由于对大一学的矩阵相关知识有些遗忘，所以又重新看了一波。
