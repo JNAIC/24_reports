@@ -1,0 +1,34 @@
+列表和元组基本学完
+学习了类与对象的相关知识及用法，下边是参考的一段代码加上了自己的理解：
+  # 定义一个简单的类
+    class Person:
+    # 构造函数
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+
+    # 方法
+    def greet(self):
+        print(f"Hello, my name is {self.name} and I am {self.age} years old.")
+
+    # 另一个方法
+    def have_birthday(self):
+        self.age += 1
+        print(f"Happy birthday! Now I am {self.age} years old.")
+
+   # 创建对象
+   person1 = Person("Alice", 30)
+   person2 = Person("Bob", 25)
+
+   # 调用方法
+   person1.greet()  # 输出: Hello, my name is Alice and I am 30 years old.
+   person2.greet()  # 输出: Hello, my name is Bob and I am 25 years old.
+
+   # 修改对象属性
+   person1.have_birthday()  # 输出: Happy birthday! Now I am 31 years old.
+   person2.have_birthday()  # 输出: Happy birthday! Now I am 26 years old.
+  除此之外还有继承和多态以及封装：
+  多态
+  多态是指同一个方法在不同的对象中有不同的实现。在 Python 中，多态通常通过方法重写来实现。
+  封装则是将数据和操作数据的方法绑定在一起，以保护数据不被外部直接访问。在 Python 中，可以通过使用私有属性（以双下划线 __ 开头）来实现封装。
+然后还是接着上周的部分在网上刷了一些编程题
