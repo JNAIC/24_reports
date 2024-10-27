@@ -1,0 +1,174 @@
+学习Linux系统
+	1. 了解其历史
+	2. 完成系统配置
+	• 完成虚拟机配置
+	• 
+	• 完成cenetos系统配置
+	▪ 分配cpu， 内存，磁盘资源
+	▪ 
+	▪ 启动虚拟机
+线性梯度回归模型
+	1. 完成matpliot等插件的本地化部署
+	2. 学习线性梯度下降的数学原理
+	3. 完成代码的复现
+	4. 代码如下
+	importtorch
+	importnumpyasnp
+	fromtorch.autogradimportVariable
+	torch.manual_seed(2017)
+	#这行代码的作用是设置Ptorch的随机种子
+	#设置随机种子，在初始化权重，打乱数据，选择随机批次数据等方面
+	#torch.manual_seed只设置CPU的随机种子
+	#使用torch.cuda.manual_seed(seed)来设置GPU的随机种子
+	#读入数据x,y
+	x_train=np.array([[3.3],[4.4],[5.5],[6.71],[6.93],[4.168],[9.779],[6.182],[7.59],[2.167],[7.042],[10.791],[5.313],[7.997],[3.1]],dtype=np.float32)
+	y_train=np.array([[1.7],[2.76],[2.09],[3.19],[1.694],[1.573],[3.366],[2.596],[2.53],[1.221],[2.827],[3.465],[1.65],[2.904],[1.3]],dtype=np.float32)
+	
+	importmatplotlib.pyplotasplt
+	
+	plt.plot(x_train,y_train,'bo')
+	plt.show()
+	#将数据的类型转化为Tensor
+	x_train=torch.from_numpy(x_train)
+	y_train=torch.from_numpy(y_train)
+	#对w,b两个变量进行初始化
+	#其中，w 的初始化是为了避免出现w被赋值为零的情况
+	w=Variable(torch.randn(1),requires_grad=True)#ᵋ๢ڡত۸
+	b=Variable(torch.zeros(1),requires_grad=True)#ֵአ0ᬰᤈڡত۸
+	# ？
+	x_train=Variable(x_train)
+	y_train=Variable(y_train)
+	#定义线性模型
+	deflinear_model(x):
+	returnx*w+b
+	y_=linear_model(x_train)
+	#简单的画图小操作，以x,y 的训练数据，蓝色，real标签画图
+	#plt.plot(x_train.data.numpy(),y_train.data.numpy(),'bo',label='real')
+	#plt.plot(x_train.data.numpy(),y_.data.numpy(),'ro',label='estimated')
+	
+	#计算误差
+	#定义了损失函数
+	defget_loss(y_,y):
+	returntorch.mean((y_-y_train)**2)#此处的mean为取平均值的意思
+	loss=get_loss(y_,y_train)
+	
+	#print(loss)
+	#对损失函数进行求导
+	loss.backward()
+	#print(w.grad)
+	#print(b.grad)
+	#？？？？？为什么求导之后，得到的是w和b的梯度？？？？？
+	#w.data=w.data-1e-2*w.grad.data
+	#b.data=b.data-1e-2*b.grad.data
+	#y_=linear_model(x_train)
+	#plt.plot(x_train.data.numpy(),y_train.data.numpy(),'bo',label='real')
+	#plt.plot(x_train.data.numpy(),y_.data.numpy(),'ro',label='estimated')
+	#plt.legend()
+	foreinrange(100):#进行100轮次的循环
+	y_=linear_model(x_train)
+	loss=get_loss(y_,y_train)
+	
+	w.grad.zero_()#将w的梯度归零
+	b.grad.zero_()#将b的梯度归零
+	loss.backward()#进行自动求导
+	
+	w.data=w.data-1e-2*w.grad.data#更新w的数据值，其中的1e-2 是科学计数法的表达
+	b.data=b.data-1e-2*b.grad.data#更新b的数据值
+	
+	y_=linear_model(x_train)
+	plt.plot(x_train.data.numpy(),y_train.data.numpy(),'bo',label='real')
+	plt.plot(x_train.data.numpy(),y_.data.numpy(),'ro',label='estimated')
+	plt.show()
+	
+	问题
+	#(x_train.data.numpy()，Variable(x_train)这些数据类型的区别是什么
+	#对损失函数进行求导
+	loss.backward()
+	#print(w.grad)
+	#print(b.grad)
+	#？？？？？为什么求导之后，得到的是w和b的梯度？？？？？
+	进阶从线性的函数预测到多项式的函数预测
+	数学原理的理解（从定义的简单的一元线性的方程，变为有高次的多系数的问题）
+	在代码的例子中，假定了一个3次函数
+	importmatplotlib.pyplotasplt
+	importtorch
+	importnumpyasnp
+	fromtorch.autogradimportVariable
+	#和线性回归模型相比，两者的损失函数定义未发生改变
+	defget_loss(y_,y):
+	returntorch.mean((y_-y_train)**2)
+	
+	torch.manual_seed(2017)
+	w_target=np.array([0.5,3,2.4])#定义参数
+	""".array是一个强大的python库，用于处理数组和矩阵
+	这里的三个参数，分别表示多项式函数的一次，二次，三次项的系数"""
+	b_target=np.array([0.9])#定义参数
+	"""这里的0.9表示的是函数的常数项
+	"""
+	f_des='y={:.2f}+{:.2f}*x+{:.2f}*x^2+{:.2f}*x^3'.format(b_target[0],w_target[0],w_target[1],w_target[2])#打印出函数的式子
+	"""注意
+	1.这里的:.2f是表示保留两位小数的意思
+	2.b_target[0]
+	"""
+	print(f_des)
+	#画出多项式的图像
+	
+	x_sample=np.arange(-3,3.1,0.1)
+	y_sample=b_target[0]+w_target[0]*x_sample+w_target[1]*x_sample**2+w_target[2]*x_sample**3
+	plt.plot(x_sample,y_sample,label='realcurve')
+	plt.show()
+	
+	x_train=np.stack([x_sample**iforiinrange(1,4)],axis=1)
+	x_train=torch.from_numpy(x_train).float()#
+	y_train=torch.from_numpy(y_sample).float().unsqueeze(1)
+	#？？？？这两行有一点不懂懂
+	#对w,b进行初始化？？可以直接对一整个数组进行初始化吗
+	w=Variable(torch.randn(3,1),requires_grad=True)
+	b=Variable(torch.zeros(1),requires_grad=True)
+	#将x,y 转化为Variable
+	x_train=Variable(x_train)
+	y_train=Variable(y_train)
+	#定义多元线性模型
+	defmulti_linear(x):
+	returntorch.mm(x,w)+b
+	#？？？？Torch.nn具体是什么？？？
+	y_pred=multi_linear(x_train)
+	plt.plot(x_train.data.numpy()[:,0],y_pred.data.numpy(),label='fittingcurve',
+	color='r')
+	plt.plot(x_train.data.numpy()[:,0],y_sample,label='realcurve',color='b')
+	plt.show()
+	
+	#上图展现了第一轮训练之后的结果
+	loss=get_loss(y_pred,y_train)
+	print(loss)
+	loss.backward()
+	#对损失函数进行求导
+	w.data=w.data-0.1*w.grad.data
+	b.data=b.data-0.1*b.grad.data
+	#进行1000轮循环
+	foreinrange(1000):
+	y_pred=multi_linear(x_train)
+	loss=get_loss(y_pred,y_train)
+	
+	w.grad.data.zero_()
+	b.grad.data.zero_()
+	loss.backward()
+	
+	#更新w,b的值
+	w.data=w.data-0.001*w.grad.data
+	b.data=b.data-0.001*b.grad.data
+	y_pred=multi_linear(x_train)
+	plt.plot(x_train.data.numpy()[:,0],y_pred.data.numpy(),label='fittingcurve',
+	color='r')
+	plt.plot(x_train.data.numpy()[:,0],y_sample,label='realcurve',color='b')
+	plt.show()
+	#绘制出图像
+	
+	进行1000轮次的循环之后，拟合的效果较为满意
+	问题
+	5. 用不同的次数的多项式对目标曲线进行拟合的结果差异有多大
+	6. array在python中的进阶用法
+	
+	
+	
+	基于logistics实现的分类问题模型
