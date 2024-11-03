@@ -1,0 +1,13 @@
+def sum_to_n(n):
+    total = 0
+    for i in range(1, n + 1):
+        total += i
+    return total
+
+# 使用函数
+n = int(input("请输入一个整数n："))
+result = sum_to_n(n)
+print(f"1到{n}的和是：{result}")
+使用python编写了1到n求和的代码；
+了解了人工智能决策树和神经网络的相关知识；
+学习了C语言指针的知识；
