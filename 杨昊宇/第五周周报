@@ -1,0 +1,184 @@
+### 1. 深入学习神经网络的原理和代码构架
+	
+	在神经网络中，模型一般包括以下三个主要层次：
+	
+	- **输入层**：接收输入数据的层，每个节点通常对应输入数据中的一个特征。
+	- **隐藏层**：进行复杂特征转换和模式提取的层，可以有多层，层数越多通常代表网络越深。
+	- **输出层**：给出预测结果的层，节点数量和任务类型有关，例如分类任务中通常等于类别数。
+	
+	下面是一个简单的神经网络架构代码，用于演示输入层、隐藏层和输出层。
+	
+	```python
+	import torch
+	import torch.nn as nn
+	import torch.optim as optim
+	
+	# 定义一个简单的神经网络架构
+	class SimpleNN(nn.Module):
+	    def __init__(self, input_size, hidden_size, output_size):
+	        super(SimpleNN, self).__init__()
+	        self.fc1 = nn.Linear(input_size, hidden_size)  # 输入层到隐藏层
+	        self.relu = nn.ReLU()                         # 激活函数
+	        self.fc2 = nn.Linear(hidden_size, output_size) # 隐藏层到输出层
+	
+	    def forward(self, x):
+	        x = self.fc1(x)
+	        x = self.relu(x)
+	        x = self.fc2(x)
+	        return x
+	
+	# 创建模型实例
+	input_size = 10  # 假设输入有10个特征
+	hidden_size = 5  # 隐藏层神经元数量
+	output_size = 2  # 输出2个类别
+	model = SimpleNN(input_size, hidden_size, output_size)
+	
+	# 打印模型结构
+	print(model)
+	```
+	
+	在这个代码中，我们定义了一个简单的前馈神经网络，包括输入层、隐藏层和输出层，使用 ReLU 激活函数。
+	
+	---
+	
+	### 2. 比较不同种类的激活函数的应用场景和分别的优势劣势
+	
+	#### 1) **ReLU（Rectified Linear Unit）函数**
+	   - **定义**：`f(x) = max(0, x)`
+	   - **优势**：解决了 sigmoid 和 tanh 在深层网络中出现的梯度消失问题，使得网络能够训练更深的层次。
+	   - **劣势**：当输入小于 0 时，梯度为 0，可能导致一些神经元永远无法激活（称为“神经元死亡”问题）。
+	   - **应用场景**：通常用于隐藏层的激活函数。
+	
+	#### 2) **Sigmoid 函数**
+	   - **定义**：`f(x) = 1 / (1 + exp(-x))`
+	   - **优势**：输出范围在 0 和 1 之间，适合用于概率输出。
+	   - **劣势**：在极端值区域梯度非常小，容易导致梯度消失问题。
+	   - **应用场景**：常用于二分类任务的输出层。
+	
+	#### 3) **Tanh 函数**
+	   - **定义**：`f(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))`
+	   - **优势**：输出范围在 -1 和 1 之间，能够更好地处理负值输入。
+	   - **劣势**：也存在梯度消失问题，尤其在深层网络中。
+	   - **应用场景**：通常用于隐藏层，但较少用于深层网络。
+	
+	**代码示例**：
+	
+	```python
+	import torch
+	
+	x = torch.tensor([-1.0, 0.0, 1.0, 2.0])  # 示例输入
+	
+	# 激活函数
+	relu = nn.ReLU()
+	sigmoid = nn.Sigmoid()
+	tanh = nn.Tanh()
+	
+	print("ReLU:", relu(x))
+	print("Sigmoid:", sigmoid(x))
+	print("Tanh:", tanh(x))
+	```
+	
+	---
+	
+	### 3. 比较不同的损失函数的应用场景，优势
+	
+	#### 1) **Logistics 损失函数**
+	   - **定义**：逻辑回归的损失函数，也称为 binary cross-entropy。
+	   - **优势**：适合于二分类任务，计算简单且效果良好。
+	   - **应用场景**：二分类任务中使用，比如二分类的图像分类。
+	
+	#### 2) **Softmax 损失函数**
+	   - **定义**：Softmax 函数用于多分类任务，用于将输出层转化为概率分布，通常与交叉熵损失（Cross Entropy Loss）结合使用。
+	   - **优势**：适合多分类任务，能够提供类别之间的概率分布。
+	   - **应用场景**：多分类任务，比如多类别的图像分类。
+	
+	**代码示例**：
+	
+	```python
+	import torch.nn.functional as F
+	
+	# 假设有两个类别
+	logits = torch.tensor([2.0, 0.5])  # 模型输出的 logits
+	
+	# Logistics 损失 (Binary Cross Entropy)
+	binary_target = torch.tensor([1.0])  # 二分类的标签
+	binary_loss = F.binary_cross_entropy_with_logits(logits[0:1], binary_target)
+	print("Binary Cross-Entropy Loss:", binary_loss.item())
+	
+	# Softmax 损失 (Cross Entropy)
+	multi_target = torch.tensor([0])  # 多分类的标签
+	multi_loss = F.cross_entropy(logits.unsqueeze(0), multi_target)
+	print("Cross-Entropy Loss:", multi_loss.item())
+	```
+	
+	---
+	
+	### 4. 完成一个能够进行异或计算的神经网络代码复现
+	
+	import numpy as np
+	# 定义激活函数及其导数
+	def sigmoid(x):
+	    return 1 / (1 + np.exp(-x))  # Sigmoid函数，用于将输出限制在0到1之间
+	def sigmoid_derivative(x):
+	    return x * (1 - x)  # Sigmoid函数的导数，便于反向传播计算
+	def relu(x):
+	    return np.maximum(0, x)  # ReLU函数，将负值映射为0，正值保持不变
+	def relu_derivative(x):
+	    return np.where(x > 0, 1, 0)  # ReLU函数的导数，正值为1，负值为0
+	def tanh(x):
+	    return np.tanh(x)  # Tanh函数，将输入映射到-1到1之间
+	def tanh_derivative(x):
+	    return 1 - np.tanh(x)**2  # Tanh函数的导数，便于反向传播计算
+	# 三层神经网络类
+	class ThreeLayerNN:
+	    # 初始化方法，定义网络的结构和学习率
+	    def __init__(self, input_size, hidden_size, output_size, learning_rate=0.01):
+	        self.learning_rate = learning_rate  # 学习率，控制权重更新的步长
+	        # 初始化第一个隐藏层的权重和偏置
+	        self.weights1 = np.random.rand(input_size, hidden_size)
+	        self.bias1 = np.random.rand(hidden_size)
+	        # 初始化第二个隐藏层的权重和偏置
+	        self.weights2 = np.random.rand(hidden_size, hidden_size)
+	        self.bias2 = np.random.rand(hidden_size)
+	        # 初始化输出层的权重和偏置
+	        self.weights3 = np.random.rand(hidden_size, output_size)
+	        self.bias3 = np.random.rand(output_size)
+	    # 前向传播方法，计算网络的输出
+	    def forward(self, x):
+	        self.z1 = relu(np.dot(x, self.weights1) + self.bias1)  # 第一个隐藏层的输出
+	        self.z2 = tanh(np.dot(self.z1, self.weights2) + self.bias2)  # 第二个隐藏层的输出
+	        self.output = sigmoid(np.dot(self.z2, self.weights3) + self.bias3)  # 输出层的结果
+	        return self.output  # 返回网络最终输出
+	    # 反向传播方法，更新权重和偏置
+	    def backward(self, x, y):
+	        output_error = y - self.output  # 计算输出误差
+	        output_delta = output_error * sigmoid_derivative(self.output)  # 输出层误差的加权调整量
+	        
+	        z2_error = output_delta.dot(self.weights3.T)  # 第二层的误差反向传递到隐藏层
+	        z2_delta = z2_error * tanh_derivative(self.z2)  # 第二层误差的加权调整量
+	        
+	        z1_error = z2_delta.dot(self.weights2.T)  # 第一层的误差反向传递到隐藏层
+	        z1_delta = z1_error * relu_derivative(self.z1)  # 第一层误差的加权调整量
+	        
+	        # 更新第三层（输出层）的权重和偏置
+	        self.weights3 += self.z2.T.dot(output_delta) * self.learning_rate
+	        self.bias3 += np.sum(output_delta, axis=0) * self.learning_rate
+	        # 更新第二层的权重和偏置
+	        self.weights2 += self.z1.T.dot(z2_delta) * self.learning_rate
+	        self.bias2 += np.sum(z2_delta, axis=0) * self.learning_rate
+	        # 更新第一层的权重和偏置
+	        self.weights1 += x.T.dot(z1_delta) * self.learning_rate
+	        self.bias1 += np.sum(z1_delta, axis=0) * self.learning_rate
+	    # 训练方法，使用给定的输入和输出数据进行多次训练
+	    def train(self, x, y, epochs=100000):
+	        for epoch in range(epochs):
+	            self.forward(x)  # 前向传播，计算输出
+	            self.backward(x, y)  # 反向传播，更新权重和偏置
+	# 示例代码，测试XOR问题, [0, 1], [1, 0], [1, 1]
+	x = np.array([[0, 0]])  # 输入数据（4种组合的0和1）
+	y = np.array([[0], [1], [1], [0]])  # XOR问题的目标输出
+	nn = ThreeLayerNN(input_size=2, hidden_size=4, output_size=1)  # 初始化神经网络
+	nn.train(x, y)  # 训练网络
+	output = nn.forward(x)  # 使用训练后的网络进行前向传播得到输出
+	print("预测输出：", output)  # 输出网络的预测结果
+	
