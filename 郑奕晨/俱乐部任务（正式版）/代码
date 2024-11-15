@@ -42,3 +42,4 @@ plt.title("line for slope and Intercept")
 plt.show()
 
 #根据该直线方程进行预测
+# 这个是初始版本（没有技术含量）
