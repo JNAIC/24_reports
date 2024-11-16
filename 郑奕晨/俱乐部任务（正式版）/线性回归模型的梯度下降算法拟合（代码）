@@ -1,0 +1,42 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+df=pd.read_csv("data.txt",sep=",",header=None,names=["Population","Profit"])
+x1=df["Population"].values
+x1=x1.reshape(-1,1)#将x1转变为二维数组
+ones=np.ones((x1.shape[0],1))
+x1=np.hstack((x1,ones))
+
+y1=df["Profit"].values
+y1=y1.reshape(-1,1)
+print(y1)
+#-------------------------读取训练集中的数据，接下来进行梯度下降的计算
+original=np.zeros((2,1))
+learning_rate=0.01#定义学习率
+learning_times=1000#定义梯度下降的训练次数
+for i in range(learning_times):
+    predictions=np.dot(x1,original)
+    error=predictions-y1
+    #sunshi=(1/(2*len(y1)))*(np.sum(error)**2)
+    gradient=np.dot(x1.T,error)/len(y1)#利用矩阵的乘法实现梯度下降（奇妙）
+    original-=learning_rate*gradient
+#————————————————————————接下来是数据的可视化
+print("估计的参数为",original)
+plt.figure(figsize=(20,8),dpi=80)
+plt.scatter(df["Population"],df["Profit"],color="orange",label="original_data")
+final_k=original[0]
+final_b=original[1]
+x2=np.linspace(5,22.5,97)
+y2=original[0]*x2+original[1]
+plt.plot(x2,y2,color="cyan",label="final_straight_line")
+plt.xlabel("Population")
+plt.ylabel("Profit")
+plt.legend()
+plt.show()
+
+
+
+
+
+
+
