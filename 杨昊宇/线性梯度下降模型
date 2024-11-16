@@ -1,0 +1,159 @@
+import torch
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import time
+from sklearn.model_selection import train_test_split
+
+def load_data(file_path):
+    """加载数据集并验证格式"""
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"文件未找到: {file_path}")
+    data = np.loadtxt(file_path, delimiter=',')
+    if data.shape[1] < 2:
+        raise ValueError("数据文件必须包含至少两列")
+    return data[:, 0].reshape(-1, 1), data[:, 1].reshape(-1, 1)
+
+def normalize_data(x, y):
+    """归一化输入特征和目标值"""
+    x_mean, x_std = x.mean(), x.std()
+    y_mean, y_std = y.mean(), y.std()
+    x = (x - x_mean) / x_std
+    y = (y - y_mean) / y_std
+    return x, y, x_mean, x_std, y_mean, y_std
+
+def train_with_early_stopping(data_path, output_path, initial_lr=1e-2, num_epochs=100, time_weight=0.1, decay_rate=0.95, decay_steps=50, patience=10):
+    # 加载数据
+    x, y = load_data(data_path)
+    
+    # 数据切分为训练集和验证集
+    x_train, x_val, y_train, y_val = train_test_split(x, y, test_size=0.2, random_state=42)
+    
+    # 归一化数据
+    x_train, y_train, x_mean, x_std, y_mean, y_std = normalize_data(x_train, y_train)
+    x_val = (x_val - x_mean) / x_std
+    y_val = (y_val - y_mean) / y_std
+
+    # 转换为 PyTorch 张量
+    x_train = torch.tensor(x_train, dtype=torch.float32)
+    y_train = torch.tensor(y_train, dtype=torch.float32)
+    x_val = torch.tensor(x_val, dtype=torch.float32)
+    y_val = torch.tensor(y_val, dtype=torch.float32)
+
+    # 初始化模型参数
+    w = torch.randn(1, requires_grad=True)
+    b = torch.zeros(1, requires_grad=True)
+
+    def linear_model(x):
+        return x * w + b
+
+    def get_loss(y_pred, y_true):
+        return torch.mean((y_pred - y_true) ** 2)
+
+    # 保存历史记录
+    train_losses = []
+    val_losses = []
+    learning_rates = []
+
+    best_val_loss = float('inf')
+    best_w, best_b = None, None
+
+    # 早停相关变量
+    no_improve_count = 0  # 无改善计数器
+
+    # 确保输出目录存在
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, 'w') as f:
+        f.write("Epoch\tTrain Loss\tVal Loss\tLearning Rate\tLinear Equation\n")
+
+    total_start_time = time.time()
+
+    for epoch in range(num_epochs):
+        start_time = time.time()
+
+        # 计算动态学习率
+        lr = initial_lr * (decay_rate ** (epoch / decay_steps))
+        learning_rates.append(lr)
+
+        # 前向传播（训练集）
+        y_pred = linear_model(x_train)
+        train_loss = get_loss(y_pred, y_train)
+
+        # 前向传播（验证集）
+        with torch.no_grad():
+            y_val_pred = linear_model(x_val)
+            val_loss = get_loss(y_val_pred, y_val)
+
+        # 保存损失
+        train_losses.append(train_loss.item())
+        val_losses.append(val_loss.item())
+
+        # 自定义损失（包含时间）
+        epoch_time = time.time() - start_time
+        normalized_time = epoch_time / (1 + epoch_time)
+        custom_loss = train_loss + time_weight * normalized_time
+
+        # 反向传播
+        custom_loss.backward()
+        with torch.no_grad():
+            w -= lr * w.grad
+            b -= lr * b.grad
+        w.grad.zero_()
+        b.grad.zero_()
+
+        # 验证集早停逻辑
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            best_w, best_b = w.clone(), b.clone()
+            no_improve_count = 0  # 重置计数器
+        else:
+            no_improve_count += 1
+
+        # 提前停止条件
+        if no_improve_count >= patience:
+            print(f"验证损失连续 {patience} 次未改善，提前停止训练！")
+            break
+
+        # 日志记录
+        linear_eq = f"y = {w.item():.4f}x + {b.item():.4f}"
+        with open(output_path, 'a') as f:
+            f.write(f"{epoch+1}\t{train_loss.item():.6f}\t{val_loss.item():.6f}\t{lr:.6f}\t{linear_eq}\n")
+
+    total_training_time = time.time() - total_start_time
+
+    # 对最终结果反归一化
+    final_w = best_w.item() * (y_std / x_std)
+    final_b = best_b.item() * y_std + y_mean - final_w * x_mean
+
+    # 可视化训练过程
+    plt.figure(figsize=(10, 5))
+
+    # 绘制损失曲线
+    plt.subplot(1, 2, 1)
+    plt.plot(range(1, len(train_losses) + 1), train_losses, label='Train Loss')
+    plt.plot(range(1, len(val_losses) + 1), val_losses, label='Validation Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.title('Loss vs. Epochs')
+    plt.legend()
+
+    # 绘制学习率曲线
+    plt.subplot(1, 2, 2)
+    plt.plot(range(1, len(learning_rates) + 1), learning_rates, label='Learning Rate')
+    plt.xlabel('Epoch')
+    plt.ylabel('Learning Rate')
+    plt.title('Learning Rate Decay')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
+    print(f"最佳验证集损失: {best_val_loss}")
+    print(f"总训练时间: {total_training_time:.2f} 秒")
+    print(f"最终模型: w = {final_w:.4f}, b = {final_b:.4f}")
+    return final_w, final_b, total_training_time
+
+# 示例用法
+data_path = r'D:/edge浏览器下载/data (1).txt'
+output_path = r'C:/Users/Administrator/Desktop/梯度下降训练模型存档/model_archive.txt'
+train_with_early_stopping(data_path, output_path, initial_lr=1e-2, num_epochs=1000, time_weight=0.1, decay_rate=0.9, decay_steps=100, patience=10)
