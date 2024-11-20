@@ -1,4 +1,4 @@
-* 代码
+* 最小二乘法
 ```python
 import numpy as np
 import pandas as pd
