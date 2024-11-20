@@ -1,3 +1,4 @@
+'''markdown
 import numpy as np
 import matplotlib.pyplot as plt
 data = np.array([[6.1101,17.592],
@@ -109,6 +110,7 @@ fit_line = np.poly1d(xishu)
 plt.plot(x, fit_line(x), color='blue', label='拟合线')
 
 plt.xlabel('自变量')
+'''
 plt.ylabel('因变量')
 plt.title('线性回归')
 plt.legend()
