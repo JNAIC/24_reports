@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+#读取数据
+url = "D:\作业.c\data.txt"
+data = pd.read_csv(url,names=['x','y'])
+x=data['x'].values
+y=data['y'].values
+k=1
+b=2
+learning rate=0.001
+epoch=1000
+#设置代价函数
+
+def cost_fuction(x,y,k,b):
+    m=len(y)
+    loss=(1/2*m)*np.sum(((k*x+b)-y)**2)
+    return loss
+
+#设置梯度下降
+def down(x,y,k,b,learning_rate):
+    m=len(y)
+    dk = 1/m*np.sum(((k*x+b)-y)*x)
+    db = 1/m*np.sum((k*x+b)-y)
+    k -= dk * learning_rate
+    b -= db * learning_rate
+    return k,b
+#训练模型
+for i in range(epoch):
+    k,b = down(x,y,k,b,learning_rate)
+    if epoch%100==0:
+        loss = cost_fuction(x,y,k,b)
+y1 = k * x + b
+plt.scatter(x,y,label='data point',color='blue')
+plt.plot(x,y1,label='predict line',color='red')
+plt.xlabel('population')
+plt.ylabel('profit')
+plt.legend()
+plt.show()
