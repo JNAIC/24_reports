@@ -4,12 +4,16 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+# 读取数据
 pd.read_csv('data.txt', header=None) 
 x = data.iloc[:, 0]
 y = data.iloc[:, 1]
+
+# 最小二乘法公式
 X = np.c_[np.ones((len(x),1)),x]
 beta=np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y.values)
 
+# 图像展示
 plt.scatter(x,y)
 plt.plot(x,beta[0]+beta[1]*x,c='black')
 plt.show()
