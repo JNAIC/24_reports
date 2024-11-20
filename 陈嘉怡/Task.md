@@ -22,7 +22,7 @@ plt.show()
   
   ![image](https://github.com/user-attachments/assets/e672cc46-c334-4306-8d56-28771ea31146)
 
-* 使用梯度函数
+* 使用梯度下降
 ```python
 import pandas as pd 
 import numpy as np 
