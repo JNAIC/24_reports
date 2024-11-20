@@ -15,4 +15,5 @@ plt.plot(x,beta[0]+beta[1]*x,c='black')
 plt.show()
 ```
 * 可视化
+  
   ![image](https://github.com/user-attachments/assets/e672cc46-c334-4306-8d56-28771ea31146)
