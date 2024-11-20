@@ -83,5 +83,7 @@ plt.plot(x,b_final+w_final*x,c='black')
 plt.show()
 ```
 * 可视化结果
+  
   ![image](https://github.com/user-attachments/assets/771d8cd4-2bc5-448f-b7ce-f908df648470)
+  
 ![image](https://github.com/user-attachments/assets/d64b16b8-d350-4d72-b326-0f6e4975b5dd)
