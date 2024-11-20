@@ -1,0 +1,44 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# 读取数据
+data = pd.read_csv("data.txt", sep="$$\text{", header=None, names=["Population", "Profit"]})
+
+# 提取Population和Profit数据
+pop = data["Population"].values
+pop = pop.reshape(-1, 1)
+ones = np.ones((pop.shape[0], 1))
+pop_with_ones = np.hstack((pop, ones))
+
+# 提取Profit数据
+profit = data["Profit"].values
+profit = profit.reshape(-1, 1)
+print(profit)
+
+# 初始化参数
+coefficients = np.zeros((2, 1))
+learning_rate = 0.01
+iterations = 100
+
+# 梯度下降算法
+for _ in range(iterations):
+    predictions = np.dot(pop_with_ones, coefficients)
+    error = predictions - profit
+    coefficients = np.dot(pop_with_ones.T, error) / len(profit)
+    coefficients -= learning_rate * coefficients
+
+print("估计的参数为", coefficients)
+
+# 绘图
+plt.figure(figsize=(20, 8), dpi=80)
+plt.scatter(data["Population"], data["Profit"], color="orange", label="data")
+slope = coefficients[0]
+intercept = coefficients[1]
+x_values = np.linspace(5, 22.5, 97)
+y_values = slope * x_values + intercept
+plt.plot(x_values, y_values, color="cyan", label="final_straight_line")
+plt.xlabel("Population")
+plt.ylabel("Profit")
+plt.legend()
+plt.show()
