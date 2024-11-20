@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 #读取数据
-url = "D:\作业.c\data.txt"
+url = "F:\data.txt"
 data = pd.read_csv(url,names=['x','y'])
 x=data['x'].values
 y=data['y'].values
