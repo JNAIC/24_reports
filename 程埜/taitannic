@@ -1,0 +1,45 @@
+import pandas as pd
+train=pd.read_csv('train.csv')
+test=pd.read_csv('test.csv')
+print(train.info())
+print(train.describe)
+rain['Age'].fillna(train['Age'].median(),inplace=True)
+test['Age'].fillna(test['Age'].median,inplace=True)
+
+train['Embarked'].fillna(train['Embarked'].mode()[0],inplace=True)
+
+train.drop('Cabin',axis=1,inplace=True)
+test.drop('Cabin',axis=1,inplace=True)
+
+test['Fare'].fillna(test['Fare'].median(),inplace=True)
+train['Sex']=train['Sex'].map({'female':0,'male':1})
+test['Sex']=test['Sex'].map({'female':0,'male':1})
+
+train['FamilySize']=train['SibSp']+train['Parch']+1
+test['FamilySize']=train['SibSp']+train['Parch']+1
+
+train['Title']=train['Name'].str.extract(' ([A-Za-z]+)\.',expand=False)
+test['Title']=test['Name'].str.extract(' ([A-Za-z]+)\.',expand=False)
+
+Title_mapping={'Mr':1,'Miss':2,'Mrs':3,'Master':4,'Other':5}
+train['Title']=train['Title'].replace(['Dr','Rev','Col','Major','Countess','Sir','Lady','Don','Jonkheer','Capt','Dona','Mme','Ms','Mile'],'Other').map(Title_mapping)
+test['Title']=test['Title'].replace(['Dr','Rev','Col','Major','Countess','Sir','Lady','Don','Jonkheer','Capt','Dona','Mme','Ms','Mile'],'Other').map(Title_mapping)
+train['NameLength'] = train['Name'].apply(len)
+
+features=['Pclass','Sex','Age','Fare','Embarked','FamilySize','Title']
+X_train = pd.get_dummies(train[features])
+Y_train=train['Survived']
+X_test=pd.get_dummies(test[features])
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+
+model=RandomForestClassifier(n_estimators=100,max_depth=5,random_state=1)
+model.fit(X_train,Y_train)
+
+model2=LogisticRegression()
+model.fit(X_train,Y_train)
+
+predictions=model.predict(X_test)
+output=pd.DataFrame({'PassengerId':test['PassengerId'],'Survived':predictions})
+output.to_csv('submission.csv',index=False)
