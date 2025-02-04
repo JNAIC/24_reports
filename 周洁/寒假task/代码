@@ -1,0 +1,47 @@
+
+```
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+
+# 加载数据
+train_data = pd.read_csv('train.csv')
+test_data = pd.read_csv('test.csv')
+
+# 数据预处理
+# 填充缺失值
+train_data['Age'].fillna(train_data['Age'].median(), inplace=True)
+test_data['Age'].fillna(test_data['Age'].median(), inplace=True)
+train_data['Embarked'].fillna(train_data['Embarked'].mode()[0], inplace=True)
+test_data['Fare'].fillna(test_data['Fare'].median(), inplace=True)
+
+# 转换分类变量
+train_data = pd.get_dummies(train_data, columns=['Sex', 'Embarked'], drop_first=True)
+test_data = pd.get_dummies(test_data, columns=['Sex', 'Embarked'], drop_first=True)
+
+# 选择特征和目标变量
+features = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare', 'Sex_male', 'Embarked_Q', 'Embarked_S']
+X_train = train_data[features]
+y_train = train_data['Survived']
+X_test = test_data[features]
+
+# 特征标准化（逻辑回归对特征尺度敏感）
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# 训练逻辑回归模型
+model = LogisticRegression(random_state=42)
+model.fit(X_train, y_train)
+
+# 预测
+predictions = model.predict(X_test)
+
+# 保存预测结果
+output = pd.DataFrame({'PassengerId': test_data['PassengerId'], 'Survived': predictions})
+output.to_csv('submission_logistic_regression.csv', index=False)
+
+print("预测结果已保存到 submission_logistic_regression.csv")
+```
