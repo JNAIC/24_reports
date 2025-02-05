@@ -45,7 +45,7 @@ result2.to_csv('D:\\VS code project\\Titanic\\result1.csv',index=False)
 最终提交的结果为：
 ![image](https://github.com/user-attachments/assets/323cde01-bf4a-40ef-a401-8bbaa605f1b4)
 
-我还想继续提高正确率，我想着是否可以不将训练集划分为训练集和测试集，这样就减少了自我检测的部分，但是可以增大训练集的数量
+若不将训练集划分为训练集和测试集，这样就减少了自我检测的部分，但是可以增大训练集的数量，是否可以提高正确率呢？
 ```
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
